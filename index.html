@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蜘蛛纸牌</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="header-content">
+                <h1>蜘蛛纸牌</h1>
+                <button id="newGame">新游戏</button>
+                <select id="gameMode">
+                    <option value="1">单花色模式</option>
+                    <option value="2">双花色模式</option>
+                    <option value="3">三花色模式</option>
+                    <option value="4">四花色模式</option>
+                </select>
+                <div class="game-stats">
+                    <span>移动次数: <span id="moves">0</span></span>
+                    <span>完成组数: <span id="completedSets">0</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="game-board">
+            <div class="card-columns"></div>
+            <div class="deck"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

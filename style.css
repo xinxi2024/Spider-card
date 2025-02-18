@@ -1,0 +1,140 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+}
+
+.game-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #34495e;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.game-header {
+    margin-bottom: 30px;
+    padding: 25px;
+    background-color: #2c3e50;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #3498db;
+}
+
+.game-header h1 {
+    font-size: 24px;
+    margin: 0;
+    color: #ecf0f1;
+    white-space: nowrap;
+}
+
+.game-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+button, select {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover, select:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+}
+
+.game-board {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 2px solid #34495e;
+}
+
+.card-columns {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.card {
+    width: 45px;
+    height: 60px;
+    background-color: white;
+    border-radius: 6px;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    color: #2c3e50;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px;
+    font-size: 14px;
+    margin-top: -48px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.card:first-child {
+    margin-top: 0;
+}
+
+.card.back {
+    background-color: #95a5a6;
+    margin-top: -52px;
+}
+
+.card.selected {
+    box-shadow: 0 0 10px #f1c40f;
+}
+
+.deck-pile {
+    width: 45px;
+    height: 60px;
+    background-color: #95a5a6;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.deck-count {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 14px;
+    color: #ecf0f1;
+}
+
+.deck-pile:hover {
+    transform: translateY(-5px);
+    transition: transform 0.2s;
+}

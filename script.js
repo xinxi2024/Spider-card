@@ -64,11 +64,20 @@ class SpiderSolitaire {
 
         document.querySelector('.card-columns').addEventListener('click', (e) => {
             const cardElement = e.target.closest('.card');
-            if (!cardElement) return;
-
-            const columnIndex = parseInt(cardElement.dataset.column);
-            const cardIndex = parseInt(cardElement.dataset.index);
-            this.handleCardClick(columnIndex, cardIndex);
+            const emptyColumn = e.target.closest('.empty-column-placeholder');
+            
+            if (cardElement) {
+                const columnIndex = parseInt(cardElement.dataset.column);
+                const cardIndex = parseInt(cardElement.dataset.index);
+                this.handleCardClick(columnIndex, cardIndex);
+            } else if (emptyColumn && this.selectedCards.length > 0) {
+                const targetColumnIndex = parseInt(emptyColumn.dataset.column);
+                this.moveCards(targetColumnIndex);
+                this.moves++;
+                this.updateStats();
+                this.checkForCompletedSets();
+                this.renderGame();
+            }
         });
 
         document.querySelector('.deck').addEventListener('click', () => {
@@ -127,19 +136,32 @@ class SpiderSolitaire {
 
     canMoveCards(targetColumnIndex) {
         const targetColumn = this.columns[targetColumnIndex];
-        if (targetColumn.length === 0) return true;
+        const [sourceColumnIndex] = this.selectedCards[0];
+        const sourceColumn = this.columns[sourceColumnIndex];
+        const firstSelectedCard = sourceColumn[sourceColumn.length - this.selectedCards.length];
 
-        const [, firstSelectedCard] = this.selectedCards[0];
+        // 如果目标列为空，允许移动任何牌
+        if (targetColumn.length === 0) {
+            return true;
+        }
+
+        // 检查目标列最上面的牌是否比要移动的牌大1
         const targetCard = targetColumn[targetColumn.length - 1];
-        return targetCard.value === firstSelectedCard.value + 1;
+        return targetCard.value === firstSelectedCard.value + 1 && targetCard.faceUp;
     }
 
     moveCards(targetColumnIndex) {
         const [sourceColumnIndex] = this.selectedCards[0];
         const sourceColumn = this.columns[sourceColumnIndex];
-        const cardsToMove = sourceColumn.splice(sourceColumn.length - this.selectedCards.length);
+        const numCardsToMove = this.selectedCards.length;
+        
+        // 从源列中移除要移动的牌
+        const cardsToMove = sourceColumn.splice(sourceColumn.length - numCardsToMove, numCardsToMove);
+        
+        // 将牌添加到目标列
         this.columns[targetColumnIndex].push(...cardsToMove);
 
+        // 如果源列还有牌，且最上面的牌是背面朝上的，则将其翻转
         if (sourceColumn.length > 0 && !sourceColumn[sourceColumn.length - 1].faceUp) {
             sourceColumn[sourceColumn.length - 1].faceUp = true;
         }
@@ -206,6 +228,16 @@ class SpiderSolitaire {
         columnsContainer.innerHTML = '';
 
         this.columns.forEach((column, columnIndex) => {
+            // 添加空列占位符
+            if (column.length === 0) {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'empty-column-placeholder';
+                placeholder.dataset.column = columnIndex;
+                placeholder.style.gridColumn = columnIndex + 1;
+                placeholder.style.gridRow = 1;
+                columnsContainer.appendChild(placeholder);
+            }
+
             column.forEach((card, cardIndex) => {
                 const cardElement = document.createElement('div');
                 cardElement.className = `card${card.faceUp ? '' : ' back'}`;
@@ -216,6 +248,7 @@ class SpiderSolitaire {
                 cardElement.dataset.index = cardIndex;
                 cardElement.style.gridColumn = columnIndex + 1;
                 cardElement.style.gridRow = cardIndex + 1;
+                cardElement.style.top = `${cardIndex * 30}px`;
                 if (card.faceUp) {
                     const valueMap = {
                         1: 'A', 11: 'J', 12: 'Q', 13: 'K'
@@ -223,6 +256,7 @@ class SpiderSolitaire {
                     const displayValue = valueMap[card.value] || card.value.toString();
                     cardElement.innerHTML = `${displayValue}<br>${card.suit}`;
                     cardElement.style.color = ['♥', '♦'].includes(card.suit) ? '#e74c3c' : '#2c3e50';
+                    cardElement.style.zIndex = cardIndex + 1;
                 }
                 columnsContainer.appendChild(cardElement);
             });
